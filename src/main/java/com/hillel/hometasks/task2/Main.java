@@ -1,35 +1,17 @@
 package com.hillel.hometasks.task2;
 
+
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+
 public class Main {
-    public static void main(String[] args) {
-        FilePropertyService filePropertyService = new FilePropertyServiceImpl();
-        String path = "e:/license.txt";
-
-        int count1 = filePropertyService.CountMaxStringLengthWay1(path);
-        System.out.println(count1);
-
-
-        int count2 = filePropertyService.CountMaxStringLengthWay2(path);
-        System.out.println(count2);
-
-        System.out.println("Cold Start:");
-        getTimeForWay(filePropertyService, path);
-        System.out.println("Warm Start:");
-        getTimeForWay(filePropertyService, path);
-    }
-
-    private static void getTimeForWay(FilePropertyService filePropertyService, String path) {
-        Long timeStart = System.nanoTime();
-        for (int i = 0; i < 1000; i++) {
-            filePropertyService.CountMaxStringLengthWay1(path);
-        }
-        Long timeFinish = System.nanoTime();
-        System.out.println(String.format("Way 1 (lambda): %,12d", (timeFinish - timeStart)));
-        timeStart = System.nanoTime();
-        for (int i = 0; i < 1000; i++) {
-            filePropertyService.CountMaxStringLengthWay2(path);
-        }
-        timeFinish = System.nanoTime();
-        System.out.println(String.format("Way 2 (simple): %,12d", (timeFinish - timeStart)));
+    public static void main(String[] args) throws RunnerException{
+        final Options options = new OptionsBuilder()
+                .include(CharsCounterTest.class.getSimpleName())
+                .forks(1)
+                .build();
+        new Runner(options).run();
     }
 }
